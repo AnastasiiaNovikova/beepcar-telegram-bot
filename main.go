@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -21,7 +22,7 @@ type TelegramWebHookPayload struct {
 	Message  struct {
 		Date      uint32
 		Text      string
-		MessageID string `json:"message_id"`
+		MessageID int `json:"message_id"`
 		Chat      struct {
 			TelegramSender
 			Type string
@@ -34,10 +35,15 @@ type TelegramWebHookPayload struct {
 }
 
 func handleUpdateWebHook(r *http.Request) error {
-	var payload TelegramWebHookPayload
-	err := json.NewDecoder(r.Body).Decode(&payload)
+	defer r.Body.Close()
+	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		return fmt.Errorf("invalid JSON in webhook: %s", err)
+		return fmt.Errorf("can't read request body: %s", err)
+	}
+
+	var payload TelegramWebHookPayload
+	if err = json.Unmarshal(reqBody, &payload); err != nil {
+		return fmt.Errorf("invalid JSON %q in webhook: %s", reqBody, err)
 	}
 
 	fmt.Printf("webhook payload is %v", payload)
@@ -45,7 +51,6 @@ func handleUpdateWebHook(r *http.Request) error {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	err := handleUpdateWebHook(r)
 	if err != nil {
 		log.Printf("request finished with error: %s", err)
