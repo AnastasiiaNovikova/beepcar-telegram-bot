@@ -35,7 +35,7 @@ type TelegramWebHookPayload struct {
 
 func handleUpdateWebHook(r *http.Request) error {
 	var payload TelegramWebHookPayload
-	err := json.NewDecoder(r.Body).Decode(payload)
+	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		return fmt.Errorf("invalid JSON in webhook: %s", err)
 	}
