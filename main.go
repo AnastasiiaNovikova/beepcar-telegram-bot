@@ -46,7 +46,7 @@ func handleUpdateWebHook(r *http.Request) error {
 		return fmt.Errorf("invalid JSON %q in webhook: %s", reqBody, err)
 	}
 
-	fmt.Printf("webhook payload is %v", payload)
+	fmt.Printf("webhook payload is %#v", payload)
 	return nil
 }
 
@@ -66,6 +66,8 @@ func main() {
 	var listenAddr string
 	flag.StringVar(&listenAddr, "listen-addr", "127.0.0.1:3030", "address to listen")
 	flag.Parse()
+
+	log.Printf("listening on %q", listenAddr)
 
 	http.HandleFunc("/btapi/update", handler)
 	log.Fatal(http.ListenAndServe(listenAddr, nil))
