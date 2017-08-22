@@ -54,7 +54,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	log.Prinf("successfully processed request")
+	log.Printf("successfully processed request")
 }
 
 func main() {
