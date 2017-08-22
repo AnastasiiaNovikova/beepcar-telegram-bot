@@ -48,11 +48,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	err := handleUpdateWebHook(r)
 	if err != nil {
+		log.Printf("request finished with error: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
+	log.Prinf("successfully processed request")
 }
 
 func main() {
