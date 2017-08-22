@@ -46,7 +46,7 @@ func handleUpdateWebHook(r *http.Request) error {
 		return fmt.Errorf("invalid JSON %q in webhook: %s", reqBody, err)
 	}
 
-	fmt.Printf("webhook payload is %#v", payload)
+	fmt.Printf("webhook payload is %+v", payload)
 	return nil
 }
 
