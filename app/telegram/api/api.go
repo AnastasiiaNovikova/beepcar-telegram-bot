@@ -40,8 +40,8 @@ func CallMethod(method string, payload interface{}) error {
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("bad http %q status code from %d, response: %s",
-			url, resp.StatusCode, string(respBody))
+		return fmt.Errorf("bad http %q status code from %d: request=%q, response=%q",
+			url, resp.StatusCode, string(payloadJSON), string(respBody))
 	}
 
 	log.Printf("successfully called telegram API method %q with payload %+v",
