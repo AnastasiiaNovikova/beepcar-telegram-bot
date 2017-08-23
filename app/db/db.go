@@ -3,10 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"io/ioutil"
 	"log"
-
-	yaml "gopkg.in/yaml.v2"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -30,20 +27,15 @@ func (c envConfig) ConnString() string {
 }
 
 func getEnvConfig() (*envConfig, error) {
-	dbConfigPath := cfg.GetConfigDir() + "/db.yaml"
-	configContent, err := ioutil.ReadFile(dbConfigPath)
-	if err != nil {
-		return nil, fmt.Errorf("can't read db config %q: %s", dbConfigPath, err)
-	}
-
 	var configs map[string]envConfig
-	if err = yaml.Unmarshal(configContent, &configs); err != nil {
-		return nil, fmt.Errorf("invalid yaml in db config %q: %s", dbConfigPath, err)
+	if err := cfg.GetYamlConfig("db", &configs); err != nil {
+		return nil, fmt.Errorf("can't get db config: %s", err)
 	}
 
 	c, ok := configs[cfg.GetEnv()]
 	if !ok {
-		return nil, fmt.Errorf("no current env %q db config in %q", cfg.GetEnv(), dbConfigPath)
+		return nil, fmt.Errorf("no current env %q in db config %+v",
+			cfg.GetEnv(), configs)
 	}
 
 	return &c, nil

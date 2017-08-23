@@ -1,16 +1,19 @@
 package webhook
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/jirfag/beepcar-telegram-bot/app/botctx"
 )
 
 const apiPath = "/btapi/update"
 
-type webhookProcessor func(r RequestPayload) error
+type webhookProcessor func(ctx context.Context) error
 
 var processor webhookProcessor
 
@@ -53,8 +56,10 @@ func handleUpdateRequest(r *http.Request) error {
 		return fmt.Errorf("invalid JSON %q in webhook: %s", reqBody, err)
 	}
 
+	ctx := context.WithValue(context.Background(), botctx.Webhook, payload)
+
 	if processor != nil {
-		if err = processor(payload); err != nil {
+		if err = processor(ctx); err != nil {
 			return fmt.Errorf("can't process webhook payload: %s", err)
 		}
 	}
