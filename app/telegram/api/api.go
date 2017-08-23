@@ -24,6 +24,7 @@ func CallMethod(method string, payload interface{}) error {
 	if err != nil {
 		return fmt.Errorf("can't create HTTP request: %s", err)
 	}
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
