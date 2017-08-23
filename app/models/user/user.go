@@ -4,7 +4,6 @@ import (
 	"database/sql"
 
 	"github.com/jinzhu/gorm"
-	"github.com/jirfag/beepcar-telegram-bot/app/cfg"
 	"github.com/jirfag/beepcar-telegram-bot/app/db"
 )
 
@@ -22,7 +21,7 @@ func (u *User) GetOrCreate() error {
 }
 
 func init() {
-	if !cfg.IsProduction() {
-		db.Get().AutoMigrate(&User{})
-	}
+	//	if !cfg.IsProduction() {
+	db.Get().AutoMigrate(&User{})
+	//	}
 }

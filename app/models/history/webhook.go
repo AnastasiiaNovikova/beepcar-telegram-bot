@@ -4,7 +4,6 @@ import (
 	"database/sql"
 
 	"github.com/jinzhu/gorm"
-	"github.com/jirfag/beepcar-telegram-bot/app/cfg"
 	"github.com/jirfag/beepcar-telegram-bot/app/db"
 	"github.com/jirfag/beepcar-telegram-bot/app/models/user"
 )
@@ -22,7 +21,7 @@ func (w *Webhook) Save() error {
 }
 
 func init() {
-	if !cfg.IsProduction() {
-		db.Get().AutoMigrate(&Webhook{})
-	}
+	//	if !cfg.IsProduction() {
+	db.Get().AutoMigrate(&Webhook{})
+	//	}
 }

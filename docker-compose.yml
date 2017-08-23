@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 volumes:
   pg_data:
@@ -15,10 +15,14 @@ services:
 
   go:
     image: golang:1.8
-    command: go run main.go
-    working_dir: /usr/src/myapp
+    command: go run app/main.go
+    working_dir: /go/src/github.com/jirfag/beepcar-telegram-bot
     volumes:
-      - ./:/usr/src/myapp:ro
+      - ./:/go/src/github.com/jirfag/beepcar-telegram-bot
     depends_on:
       - db
+    environment:
+      - GO_ENV=production
+    ports:
+      - "127.0.0.1:3030:3030"
     restart: always

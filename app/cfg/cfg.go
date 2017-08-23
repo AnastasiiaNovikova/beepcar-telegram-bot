@@ -24,7 +24,7 @@ func GetConfigDir() string {
 }
 
 func GetEnv() string {
-	env := os.Getenv("GO_MODE")
+	env := os.Getenv("GO_ENV")
 	if env != "" {
 		return env
 	}

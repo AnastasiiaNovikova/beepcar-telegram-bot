@@ -11,7 +11,7 @@ import (
 
 func main() {
 	var listenAddr string
-	flag.StringVar(&listenAddr, "listen-addr", "127.0.0.1:3030",
+	flag.StringVar(&listenAddr, "listen-addr", ":3030",
 		"address to listen")
 	flag.Parse()
 
