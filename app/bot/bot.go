@@ -76,11 +76,11 @@ func processWebhookContent(ctx context.Context) error {
 	fromLocName, toLocName := msgFields[1], msgFields[2]
 	fromLocID, err := beepcar.LocationNameToID(ctx, fromLocName)
 	if err != nil {
-		return fmt.Errorf("can't convert from location name %q to id: %s", fromLocName, rr)
+		return fmt.Errorf("can't convert from location name %q to id: %s", fromLocName, err)
 	}
 	toLocID, err := beepcar.LocationNameToID(ctx, toLocName)
 	if err != nil {
-		return fmt.Errorf("can't convert to location name %q to id: %s", toLocName, rr)
+		return fmt.Errorf("can't convert to location name %q to id: %s", toLocName, err)
 	}
 
 	log.Printf("/search %s %s -> [%d %d]", fromLocName, toLocName,

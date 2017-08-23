@@ -48,7 +48,7 @@ func LocationNameToID(ctx context.Context, name string) (int64, error) {
 }
 
 func callAPI(subPath string, ret interface{}) error {
-	url := fmt.Sprintf("https://beepcar.ru/v1%s", subPath)
+	url := fmt.Sprintf("https://api.beepcar.ru/v1%s", subPath)
 	resp, err := http.Get(url)
 	if err != nil {
 		return fmt.Errorf("can't make http request to %q: %s", url, err)
