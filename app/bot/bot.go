@@ -8,6 +8,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/jirfag/beepcar-telegram-bot/app/beepcar"
 	"github.com/jirfag/beepcar-telegram-bot/app/botctx"
 	"github.com/jirfag/beepcar-telegram-bot/app/db"
 	"github.com/jirfag/beepcar-telegram-bot/app/models/history"
@@ -67,10 +68,23 @@ func processWebhookContent(ctx context.Context) error {
 	w := getWebhook(ctx)
 	msg := w.Message.Text
 	msgFields := strings.Fields(msg)
-	if len(msgFields) != 3 {
+	if len(msgFields) != 3 || msgFields[0] != "/search" {
 		sendToUser(ctx, errInvalidSearchCommand.Error())
 		return nil
 	}
+
+	fromLocName, toLocName := msgFields[1], msgFields[2]
+	fromLocID, err := beepcar.LocationNameToID(ctx, fromLocName)
+	if err != nil {
+		return fmt.Errorf("can't convert from location name %q to id: %s", fromLocName, rr)
+	}
+	toLocID, err := beepcar.LocationNameToID(ctx, toLocName)
+	if err != nil {
+		return fmt.Errorf("can't convert to location name %q to id: %s", toLocName, rr)
+	}
+
+	log.Printf("/search %s %s -> [%d %d]", fromLocName, toLocName,
+		fromLocID, toLocID)
 
 	return nil
 }

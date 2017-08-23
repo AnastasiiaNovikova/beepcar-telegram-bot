@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/jirfag/beepcar-telegram-bot/app/botctx"
 )
@@ -56,7 +57,10 @@ func handleUpdateRequest(r *http.Request) error {
 		return fmt.Errorf("invalid JSON %q in webhook: %s", reqBody, err)
 	}
 
-	ctx := context.WithValue(context.Background(), botctx.Webhook, payload)
+	ctx, cancel := context.WithTimeout(
+		context.WithValue(context.Background(), botctx.Webhook, payload),
+		time.Second*10)
+	defer cancel()
 
 	if processor != nil {
 		if err = processor(ctx); err != nil {
