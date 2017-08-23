@@ -86,7 +86,25 @@ func processWebhookContent(ctx context.Context) error {
 	log.Printf("/search %s %s -> [%d %d]", fromLocName, toLocName,
 		fromLocID, toLocID)
 
+	tripIDs, err := beepcar.Search(ctx, fromLocID, toLocID)
+	if err != nil {
+		return fmt.Errorf("can't search trips from %d to %d: %s",
+			fromLocID, toLocID, err)
+	}
+
+	tripsLinksMsg := makeTripLinksMsg(tripIDs)
+	sendToUser(ctx, tripsLinksMsg)
+
 	return nil
+}
+
+func makeTripLinksMsg(tripIDs []int64) string {
+	r := "Поездки:\n"
+	for _, tripID := range tripIDs {
+		r += fmt.Sprintf("https://beepcar.ru/poezdka/%d\n", tripID)
+	}
+
+	return r
 }
 
 func sendToUser(ctx context.Context, msg string) {
