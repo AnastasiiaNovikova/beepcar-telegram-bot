@@ -99,6 +99,10 @@ func processWebhookContent(ctx context.Context) error {
 }
 
 func makeTripLinksMsg(tripIDs []int64) string {
+	if len(tripIDs) == 0 {
+		return "Поездок по маршруту не найдено"
+	}
+
 	r := "Поездки:\n"
 	for _, tripID := range tripIDs {
 		r += fmt.Sprintf("https://beepcar.ru/poezdka/%d\n", tripID)

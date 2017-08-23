@@ -72,10 +72,6 @@ func Search(ctx context.Context, fromLocID, toLocID int64) ([]int64, error) {
 		return nil, fmt.Errorf("api error: %s", apiErr)
 	}
 
-	if len(resp.Result.Trips) == 0 {
-		return nil, fmt.Errorf("empty locations response %+v", resp)
-	}
-
 	ids := []int64{}
 	for _, t := range resp.Result.Trips {
 		ids = append(ids, t.TripID)
