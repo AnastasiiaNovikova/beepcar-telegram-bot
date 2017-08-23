@@ -40,7 +40,7 @@ func CallMethod(method string, payload interface{}) error {
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("bad http %q status code from %d: request=%q, response=%q",
+		return fmt.Errorf("bad http %q status code from %d: request='%s', response='%s'",
 			url, resp.StatusCode, string(payloadJSON), string(respBody))
 	}
 

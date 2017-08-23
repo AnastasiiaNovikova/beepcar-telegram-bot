@@ -79,7 +79,7 @@ func sendToUser(ctx context.Context, msg string) {
 	w := getWebhook(ctx)
 	payload := struct {
 		ChatID int64  `json:"chat_id"`
-		Text   string `json:"string"`
+		Text   string `json:"text"`
 	}{
 		ChatID: w.Message.Chat.ID,
 		Text:   msg,
