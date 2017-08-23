@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -32,9 +33,14 @@ func CallMethod(method string, payload interface{}) error {
 	if resp.Body != nil {
 		defer resp.Body.Close()
 	}
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("can't read telegram API response to %q: %s", url, err)
+	}
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("bad http status code from %q: %d", url, resp.StatusCode)
+		return fmt.Errorf("bad http %q status code from %d, response: %s",
+			url, resp.StatusCode, string(respBody))
 	}
 
 	log.Printf("successfully called telegram API method %q with payload %+v",
