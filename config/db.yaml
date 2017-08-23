@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgres
+  username: postgres
+  password:
+  host: db
+
+development:
+  <<: *default
+  database: app_development
+
+test:
+  <<: *default
+  database: app_test
+  host: 127.0.0.1
+  port: 1432
+
+production:
+  <<: *default
+  database: app_production

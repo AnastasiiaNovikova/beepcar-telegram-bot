@@ -1,0 +1,24 @@
+version: '3'
+
+volumes:
+  pg_data:
+    driver: local
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "1432:5432"
+    restart: always
+
+  go:
+    image: golang:1.8
+    command: go run main.go
+    working_dir: /usr/src/myapp
+    volumes:
+      - ./:/usr/src/myapp:ro
+    depends_on:
+      - db
+    restart: always
